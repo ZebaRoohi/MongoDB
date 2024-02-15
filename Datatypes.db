@@ -1,0 +1,28 @@
+````DATATYPES`````
+db.string.insertOne({name:'John',email:'john@test.com'})
+db.integer.insertOne({name:'Sam',age:23})
+db.double.insertOne({product:'Laptop',price:236})
+db.boolean.insertOne({name:'Harry',isStudent:true})
+db.array.insertOne({orderItems:['items1','item2','item3']})
+db.object.insertOne({name:'sam',address:{city:'telengane',zipcode:40002}})
+db.null.insertOne({content:null})
+db.objid.insertOne({_id:ObjectId(),name:'John'})
+db.date.insertOne({order:'laptop',orderdate:new ISODate("2024-02-09T14:10:30Z")})
+
+//Displaying output
+db.integer.find().pretty()
+
+    ```Array Operators````
+
+db.array.insertMany([
+{username:'John',skills:['js','html','css'],age:23},
+{username:'Harry',skills:['python','django'],age:31},
+{username:'Sam',skills:['mongodb','mysql','angular'],age:43}
+])
+
+Methods:
+db.array.updateOne({username:'John'},{$push:{skills:'react'}})
+db.array.find({username:'John'})
+db.array.updateOne({username:'Harry'},{$pull:{skills:'django'}})
+db.array.updateOne({username:'John'},{$pop:{skills:1}})
+db.array.find({skills:{$all:['mongodb']}})

@@ -1,0 +1,35 @@
+'''CRUD operations with mongoDB'''
+
+How to create Database?
+use Databasename
+
+How to create collections?
+db.createCollection('collection_name')
+
+How to delete collections?
+db.collection_name.drop()
+
+How to delete database?
+db.dropDatabase()
+
+                 ```INSERT QUERY````
+db.collection_name.insertOne({name:'john'age:23,status:'active'})
+db.collection_name.insertMany([{},{},{}])
+
+
+                 ````FIND`````
+db.collection_name.find({age:21})
+db.collection_name.find({age:{$gte:21}}) //in between the condition
+db.collection_name.find().sort({name:1})//ascending order
+db.collection_name.find().sort({age:-1})//descending order
+db.collection_name.find().limit(2)//display 2 entries on screen
+
+          `       ```UPDATE`````
+db.collection_name.updateOne({name:'Harry'},{$set:{status:'active'}})
+db.collection_name.updateMany({age:{$gte:21}},{$set:{status:'very active'}})
+
+                ````DELETE````
+db.collection_name.deleteOne({name:'John'})
+db.collection_name.deleteMany({status:'active'})
+
+

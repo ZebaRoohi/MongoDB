@@ -1,0 +1,48 @@
+```Comparision operators```
+
+db.users.find({age:{$eq:21}})
+db.users.find(
+  {age:
+    {$ne:21}
+}
+)
+db.users.find({age:{$gt:25}})
+db.users.find({age:{$gte:25}})
+db.users.find(
+  {age:{$in:
+	[21,39,40]
+}}
+)
+
+`````Logical Operators````
+db.users.find({
+$and:[
+  {age:{$gte:20}},{age:{$lte:30}}
+]
+})
+
+db.users.find({
+$or:[
+  {age:{$gt:20}},{age:{$lt:30}}
+]
+})
+
+db.users.find({
+$nor:[
+  {age:{$gte:20}},{age:{$lte:30}}
+]
+})
+
+db.users.find({
+age:{$not:{$gte:20,$lte:30}}
+})
+
+
+        ```Evaluate Operators````
+
+db.users.find({
+name:{$regex:/john/i}
+})
+
+        
+

@@ -1,0 +1,137 @@
+use store;
+db.customers.insertMany([
+  {customerId:1,name:'John',country:'USA'},
+  {customerId:2,name:'Harry',country:'UK'},
+  {customerId:3,name:'Sam',country:'Canada'}
+
+])
+
+```perform aggregation on it```
+ db.sales.aggregate([
+  // Match to filter documents based on certain criteria (e.g., year)
+  { $match: { year: 2023 } },
+  
+  // Group by product and calculate total quantity and total revenue
+  { $group: {
+      _id: "$product",
+      total_quantity: { $sum: "$quantity" },
+      total_revenue: { $avg: "$price" }
+  } }
+]);
+
+//sorting and limit :
+db.sales.aggregate([
+  {$match:{year:2023}},
+  {
+	$group:{_id:"$product",totalSales:{$sum:'$quantity'},totalPrice:{$avg:'$price'}}
+},
+  {$sort:{totalSales:-1}},
+  {$limit:1}
+])
+
+//To run aggregate.
+db.collection.aggregate()
+
+//$project Stage Placement
+When you use a $project stage it should typically be the last stage in your pipeline, used to specify which fields to return to the client.
+db.sales.aggregate([
+  {$match:{year:2023}},
+  {
+	$group:{_id:"$product",totalSales:{$sum:'$quantity'},totalPrice:{$avg:'$price'}}
+},
+  {$sort:{totalSales:-1}},
+  {$project:{_id:'$product',totalSales:1,totalPrice:1}}
+])
+
+//We use a 1 to include a field and 0 to exclude a field.
+
+//Skip
+db.sales.aggregate([
+  {
+	$group:{_id:"$product",totalSale:{$sum:"$quantity"}}
+},
+  {$project:
+
+  {_id:0,totalSale:0}},
+  {$skip:1}
+])
+
+````New data base Ecommerce````
+mongodb+srv://batch30:<password>@cluster0.2kmuect.mongodb.net/
+db.customers.insertMany([
+  {id:1,name:'Harry',age:20,city:'NYC'},
+  {id:2,name:'John',age:23,city:'UK'},
+  {id:3,name:'Sam',age:25,city:'Aus'}
+])
+
+db.orders.insertMany([
+  {customerId:3,product:'Tablet',quantity:3,price:500},
+  {customerId:4,product:'SmartWatch',quantity:2,price:400},
+  {customerId:5,product:'Headphones',quantity:4,price:200},
+  {customerId:6,product:'SmartTv',quantity:1,price:1200},
+  {customerId:7,product:'Speakers',quantity:1,price:700}
+
+])
+
+1.Group:
+db.orders.aggregate([
+  {$group:{_id:"$customerId",totalSum:{$sum:"$quantity"}}}
+])
+
+2.limit
+db.orders.aggregate([
+  {$limit:3}
+])
+
+3.project
+db.customers.aggregate([
+  {$project:{name:1,city:1}}
+]) //includes
+
+db.customers.aggregate([
+  {$project:{name:0,city:0}}
+]) //excludes
+
+4.sort
+db.customers.aggregate([
+  {$sort:{age:-1}}
+])
+
+5.match
+db.orders.aggregate([
+  {$match:{price:{$gt:500}}}
+])
+
+6.addFields
+db.orders.aggregate([
+  {$addFields:{totalPrice:{$multiply:["$quantity","$price"]}}}
+])
+
+7.count
+db.orders.aggregate([
+  {$count:"totalSum"}
+])
+
+8.lookup
+db.orders.aggregate([
+  {$lookup:
+  {from:"customers",localField:"customerId",foreignField:"_id",as:"customerInfo"}
+}
+])
+
+9.out
+db.orders.aggregate([
+  {$out:"customerOders"}
+])
+
+10.unwind
+db.customers.updateMany(
+  {},{$set:{purchases:['Laptop','SmartPhone','Watch','TV']}}
+)
+db.customers.aggregate([
+  {$unwind:"$purchases"}
+])
+
+
+
+
